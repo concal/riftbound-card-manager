@@ -4,7 +4,6 @@ import { authClient } from '@/lib/auth-client';
 export function useAuth() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  // TODO: Any security risks with storing password like this?
   const [signInData, setSignInData] = useState({ email: '', password: '' });
   const [signUpData, setSignUpData] = useState({
     name: '',

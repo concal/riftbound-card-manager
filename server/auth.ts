@@ -1,16 +1,24 @@
 import { betterAuth } from 'better-auth';
-import Database from 'better-sqlite3';
+import { mongodbAdapter } from 'better-auth/adapters/mongodb';
+import { client } from './db/mongo';
 
 export const auth = betterAuth({
-  // TODO: Replace local.db for production if needed
-  database: new Database('./local.db'),
+  database: mongodbAdapter(client.db()),
   emailAndPassword: {
     enabled: true,
   },
-  trustedOrigins: [
-    // TODO: Set up proper origins and credentials handling for production
-    process.env.BETTER_AUTH_TRUSTED_ORIGIN ?? 'http://localhost:5173',
-  ],
+  rateLimit: {
+    enabled: true,
+    window: 60,
+    max: 10,
+    customRules: {
+      '/sign-in/email': { window: 60, max: 5 },
+      '/sign-up/email': { window: 60, max: 3 },
+    },
+  },
+  trustedOrigins: (process.env.ALLOWED_ORIGINS ?? 'http://localhost:5173')
+    .split(',')
+    .map((o) => o.trim()),
 });
 
 export async function getUser(c: any) {

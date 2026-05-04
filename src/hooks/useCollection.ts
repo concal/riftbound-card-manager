@@ -3,6 +3,7 @@ import { useUserSettingsContext } from '@/context/UserSettingsContext';
 import type { FormattedCardResponse } from '@/types/card';
 import type { SortKey } from '@/types/sort';
 import { getDisplayPrice } from '@/util/priceUtils';
+import { API_BASE } from '@/lib/api';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 
 type CardEntry = { cardId: number; tcgplayerId: number; quantity: number };
@@ -47,7 +48,7 @@ export function useCollection() {
       setLoading(false);
       return;
     }
-    fetch('/api/collections', { credentials: 'include' })
+    fetch(`${API_BASE}/api/collections`, { credentials: 'include' })
       .then((resp) => resp.json())
       .then((respJSON: { cards: CardEntry[] }) => applyEntries(respJSON.cards))
       .finally(() => setLoading(false));
@@ -63,7 +64,7 @@ export function useCollection() {
       tcgplayerId: number;
     }) => {
       setSaving(true);
-      const resp = await fetch(`/api/collections/cards/${cardId}`, {
+      const resp = await fetch(`${API_BASE}/api/collections/cards/${cardId}`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -71,7 +72,6 @@ export function useCollection() {
       });
       if (resp.ok) {
         const data: { cards: CardEntry[] } = await resp.json();
-        console.log(data);
         applyEntries(data.cards);
       }
       setSaving(false);
@@ -83,7 +83,7 @@ export function useCollection() {
   // Async callback for removing a card from collection
   const removeCard = useCallback(async ({ cardId }: { cardId: number }) => {
     setSaving(true);
-    const res = await fetch(`/api/collections/cards/${cardId}`, {
+    const res = await fetch(`${API_BASE}/api/collections/cards/${cardId}`, {
       method: 'DELETE',
       credentials: 'include',
     });

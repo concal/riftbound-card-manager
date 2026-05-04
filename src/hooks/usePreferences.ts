@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { API_BASE } from '@/lib/api';
 import type { SortKey } from '@/types/sort';
 import type { Theme } from '@/types/theme';
 
@@ -74,7 +75,7 @@ export function usePreferences(userId?: string) {
   useEffect(() => {
     if (!userId || fetchedForUser === userId) return;
     fetchedForUser = userId;
-    fetch('/api/preferences', { credentials: 'include' })
+    fetch(`${API_BASE}/api/preferences`, { credentials: 'include' })
       .then((r) => r.json())
       .then((data: Preferences) => setStore({ ...DEFAULTS, ...data }))
       .catch(() => {
@@ -85,7 +86,7 @@ export function usePreferences(userId?: string) {
   function update(patch: Partial<Preferences>) {
     const next = { ...store, ...patch };
     setStore(next);
-    fetch('/api/preferences', {
+    fetch(`${API_BASE}/api/preferences`, {
       method: 'PUT',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },

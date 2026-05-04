@@ -1,30 +1,11 @@
 import { createContext, useContext } from 'react';
 import { authClient } from '@/lib/auth-client';
-import type { StripEmptyObjects } from 'node_modules/better-auth/dist/types/helper.d.mts';
 import { usePreferences, type Preferences } from '@/hooks/usePreferences';
 
+type SessionData = NonNullable<ReturnType<typeof authClient.useSession>['data']>;
+
 interface UserSettingsContextType {
-  authData: {
-    user: StripEmptyObjects<{
-      id: string;
-      createdAt: Date;
-      updatedAt: Date;
-      email: string;
-      emailVerified: boolean;
-      name: string;
-      image?: string | null | undefined;
-    }>;
-    session: StripEmptyObjects<{
-      id: string;
-      createdAt: Date;
-      updatedAt: Date;
-      userId: string;
-      expiresAt: Date;
-      token: string;
-      ipAddress?: string | null | undefined;
-      userAgent?: string | null | undefined;
-    }>;
-  } | null;
+  authData: SessionData | null;
   authPending: boolean;
   updateUserPreferences: (preferences: Partial<Preferences>) => void;
   userPreferences: Preferences | null;

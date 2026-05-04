@@ -3,6 +3,7 @@ import type {
   SearchCardResponse,
   TcgplayerCardResponse,
 } from '@/types/card';
+import { API_BASE } from '@/lib/api';
 
 function formatSearchCardResponse(
   card: SearchCardResponse,
@@ -62,7 +63,7 @@ export async function fetchTcgApiSearchResults({
   page?: number;
 }) {
   const searchParams = `q=${encodeURIComponent(query)}&game=${GAME_SLUG}&type=Cards&per_page=${PER_PAGE}&page=${page}`;
-  return fetch(`/api/v1/search?${searchParams}`)
+  return fetch(`${API_BASE}/api/v1/search?${searchParams}`)
     .then((resp) => resp.json())
     .then((data: { data: SearchCardResponse[] }) =>
       (data.data ?? []).map(formatSearchCardResponse),
@@ -95,7 +96,7 @@ export async function fetchCardDetailsByTcgplayerId({
 }: {
   ids: number[];
 }) {
-  return fetch('/api/v1/bulk/resolve/tcgplayer', {
+  return fetch(`${API_BASE}/api/v1/bulk/resolve/tcgplayer`, {
     method: 'POST',
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
