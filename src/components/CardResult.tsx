@@ -28,7 +28,7 @@ export function CardResult({ card }: CardResultProps) {
   return (
     <>
       <div
-        className={`flex flex-col items-center gap-2 w-fit max-w-[calc(50%-8px)] border border-border rounded-xl p-2 cursor-pointer hover:border-foreground/30 transition-colors${imageLoadStatus === 'pending' ? ' hidden' : ''}`}
+        className={`flex flex-col items-center gap-2 w-fit max-w-[calc(33.333%-8px)] border border-border rounded-xl p-2 cursor-pointer hover:border-foreground/30 transition-colors${imageLoadStatus === 'pending' ? ' hidden' : ''}`}
         onClick={() => setModalOpen(true)}
       >
         <div className="relative w-fit max-w-full rounded-lg overflow-hidden shadow-md bg-muted">
