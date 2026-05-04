@@ -147,8 +147,8 @@ export function useCollection() {
             (getDisplayPrice(a) || Infinity) - (getDisplayPrice(b) || Infinity)
           );
         case 'price-desc': {
-          const pa = a.marketPrice ?? -Infinity;
-          const pb = b.marketPrice ?? -Infinity;
+          const pa = getDisplayPrice(a) ?? -Infinity;
+          const pb = getDisplayPrice(b) ?? -Infinity;
           return pb - pa;
         }
       }
