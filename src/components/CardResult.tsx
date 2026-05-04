@@ -48,7 +48,7 @@ export function CardResult({ card }: CardResultProps) {
             {displayPrice != null ? `$${displayPrice.toFixed(2)}` : 'No price'}
           </span>
         </div>
-        <div className="text-center w-full">
+        <div className="text-center w-0 min-w-full overflow-hidden">
           <p
             className="text-sm font-semibold leading-tight truncate"
             title={name}

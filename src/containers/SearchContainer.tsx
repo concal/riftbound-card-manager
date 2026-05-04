@@ -20,7 +20,7 @@ export function SearchContainer({ isEditingCollection }: SearchContainerProps) {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-4 sm:p-6 space-y-6">
+    <div className="w-full space-y-4">
       <h1 className="hidden sm:block text-3xl font-bold">
         {isEditingCollection ? 'Add Cards' : 'Search'}
       </h1>

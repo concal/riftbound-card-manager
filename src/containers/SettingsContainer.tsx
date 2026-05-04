@@ -65,7 +65,7 @@ export function SettingsContainer() {
     useUserSettingsContext();
 
   return (
-    <div className="max-w-xl mx-auto p-4 sm:p-6 space-y-6">
+    <div className="w-full p-4 sm:p-6 space-y-6">
       <h1 className="hidden sm:block text-3xl font-bold">Settings</h1>
 
       <section className="space-y-3">

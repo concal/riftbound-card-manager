@@ -69,7 +69,7 @@ export function CardDetailsModal({ card, onClose }: CardDetailsModalProps) {
           <img
             src={imageUrl!.replace('/fit-in/400x400', '')}
             alt={name}
-            className="w-full rounded-lg shadow-md"
+            className="max-h-[calc(90dvh-220px)] w-auto max-w-full mx-auto block rounded-lg shadow-md"
           />
           <div className="space-y-1 text-sm">
             <div className="flex justify-between">
