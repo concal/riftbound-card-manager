@@ -35,6 +35,8 @@ app.use(
   }),
 );
 
+app.get('/health', (c) => c.json({ status: 'ok' }));
+
 app.route('/api/collections', collectionRoutes);
 app.route('/api/preferences', preferencesRoutes);
 
