@@ -19,17 +19,6 @@ export const auth = betterAuth({
   trustedOrigins: (process.env.ALLOWED_ORIGINS ?? 'http://localhost:5173')
     .split(',')
     .map((o) => o.trim()),
-  advanced: {
-    useSecureCookies: true,
-    cookies: {
-      session_token: {
-        attributes: {
-          sameSite: 'none',
-          secure: true,
-        },
-      },
-    },
-  },
 });
 
 export async function getUser(c: any) {
