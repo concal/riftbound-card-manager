@@ -1,73 +1,77 @@
-# React + TypeScript + Vite
+# Riftbound Collection Manager
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A personal card collection manager for Riftbound TCG. Search for cards by name, track your collection, and view live market prices powered by the TCGPlayer API.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Card Search** — Search cards by name and browse results with card art and pricing
+- **Collection Tracking** — Add cards to your personal collection stored in MongoDB
+- **Live Pricing** — Fetches and caches market prices from TCGPlayer via the TCGAPI
+- **Filtering & Sorting** — Filter your collection by name or price range, sort by price or name
+- **Authentication** — Email/password auth via [better-auth](https://better-auth.com)
+- **Responsive UI** — Mobile-friendly layout with a bottom nav on small screens
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| Layer | Technology |
+|---|---|
+| Frontend | React 19, TypeScript, Vite, Tailwind CSS v4 |
+| Backend | Hono on Node.js |
+| Database | MongoDB (collections), SQLite (auth sessions) |
+| Auth | better-auth |
+| UI Components | shadcn/ui, Lucide React |
+| Card Data | [TCGAPI](https://tcgapi.dev) |
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Prerequisites
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Node.js 18+
+- A MongoDB cluster
+- A [TCGAPI](https://tcgapi.dev) API key
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Setup
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1. Clone the repo and install dependencies:
+   ```bash
+   npm install
+   ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. Copy `.env.example` to `.env.local` and fill in your values:
+   ```bash
+   cp .env.example .env.local
+   ```
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+   | Variable | Description |
+   |---|---|
+   | `TCGAPI_KEY` | Your TCGAPI API key |
+   | `BETTER_AUTH_SECRET` | Random secret for session signing (generate with `openssl rand -base64 32`) |
+   | `BETTER_AUTH_URL` | Base URL of the backend server |
+   | `MONGODB_URI` | MongoDB connection string |
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+3. Start the development servers (client + server run concurrently):
+   ```bash
+   npm run dev
+   ```
+
+   - Frontend: `http://localhost:5173`
+   - Backend: `http://localhost:3001`
+
+### Available Scripts
+
+| Script | Description |
+|---|---|
+| `npm run dev` | Start both client and server with hot reload |
+| `npm run dev:client` | Start Vite dev server only |
+| `npm run dev:server` | Start Hono server only |
+| `npm run build` | Type-check and build for production |
+| `npm run lint` | Run ESLint |
+
+## Architecture
+
+The backend is a Hono server that serves two purposes:
+
+1. **API proxy** — Forwards requests to TCGAPI with the secret API key injected server-side, keeping the key out of the browser. Bulk TCGPlayer ID resolution is handled with in-memory caching and automatic chunking to stay within the TCGAPI 100-item batch limit.
+2. **App API** — REST endpoints for managing collections (`/api/collections`) and user preferences (`/api/preferences`), backed by MongoDB.
+
+Authentication is handled by better-auth with email/password, using a local SQLite database for session storage.
