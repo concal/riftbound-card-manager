@@ -106,7 +106,7 @@ export function AuthForm() {
                         name: event.target.value,
                       }))
                     }
-                    placeholder="Your name"
+                    placeholder="Username"
                     required={true}
                     type="text"
                     value={signUpData.name}

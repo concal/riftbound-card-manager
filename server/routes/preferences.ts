@@ -37,13 +37,31 @@ preferences.put('/', async (reqContext) => {
   if (!user) return reqContext.json({ error: 'Unauthorized' }, 401);
 
   const body = await reqContext.req.json<Partial<UserPreferences>>();
+
+  const VALID_THEMES = ['light', 'dark', 'system'] as const;
+  const VALID_SORTS = ['price-desc', 'price-asc', 'name-asc', 'name-desc'] as const;
+
+  const update: Partial<Omit<UserPreferences, 'userId'>> = {};
+  if (body.theme !== undefined) {
+    if (!VALID_THEMES.includes(body.theme)) {
+      return reqContext.json({ error: 'Invalid theme' }, 400);
+    }
+    update.theme = body.theme;
+  }
+  if (body.defaultSort !== undefined) {
+    if (!VALID_SORTS.includes(body.defaultSort)) {
+      return reqContext.json({ error: 'Invalid defaultSort' }, 400);
+    }
+    update.defaultSort = body.defaultSort;
+  }
+
   const db = await getDb();
 
   await db
     .collection<UserPreferences>('preferences')
     .updateOne(
       { userId: user.id },
-      { $set: { userId: user.id, ...body } },
+      { $set: { userId: user.id, ...update } },
       { upsert: true },
     );
 

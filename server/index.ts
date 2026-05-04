@@ -14,21 +14,24 @@ function chunk<T>(arr: T[], size: number): T[][] {
   return out;
 }
 
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS ?? 'http://localhost:5173')
+  .split(',')
+  .map((o) => o.trim());
+
 const app = new Hono();
 
-app.route('/api/collections', collectionRoutes);
-app.route('/api/preferences', preferencesRoutes);
-
 app.use(
-  '/api/auth/*',
+  '*',
   cors({
-    // TODO: Set up proper origins and credentials handling for production
-    origin: process.env.BETTER_AUTH_TRUSTED_ORIGIN ?? 'http://localhost:5173',
+    origin: (origin) => (ALLOWED_ORIGINS.includes(origin) ? origin : null),
     allowHeaders: ['Content-Type', 'Authorization'],
-    allowMethods: ['POST', 'GET', 'OPTIONS'],
+    allowMethods: ['POST', 'GET', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true,
   }),
 );
+
+app.route('/api/collections', collectionRoutes);
+app.route('/api/preferences', preferencesRoutes);
 
 app.on(['POST', 'GET'], '/api/auth/*', (reqContext) =>
   auth.handler(reqContext.req.raw),
@@ -71,21 +74,13 @@ app.post('/api/v1/bulk/resolve/tcgplayer', async (reqContext) => {
 });
 
 /**
- * Proxy endpoint for all other /api/v1/* requests to TCGAPI, with API key injection. This is a catch-all for any endpoints we haven't implemented server-side.
- *
- * TODO: Be mindful of potential security implications and consider restricting or implementing specific endpoints as needed for production use.
+ * GET /api/v1/search - Proxy for TCGAPI card search
  */
-app.all('/api/v1/*', async (reqContext) => {
+app.get('/api/v1/search', async (reqContext) => {
   const url = new URL(reqContext.req.url);
-  const targetUrl = `https://api.tcgapi.dev${url.pathname.replace(/^\/api/, '')}${url.search}`;
-  const isPost = reqContext.req.method === 'POST';
+  const targetUrl = `https://api.tcgapi.dev/v1/search${url.search}`;
   const res = await fetch(targetUrl, {
-    method: reqContext.req.method,
-    headers: {
-      'X-API-Key': process.env.TCGAPI_KEY ?? '',
-      ...(isPost ? { 'Content-Type': 'application/json' } : {}),
-    },
-    body: isPost ? await reqContext.req.text() : undefined,
+    headers: { 'X-API-Key': process.env.TCGAPI_KEY ?? '' },
   });
   return reqContext.json(
     await res.json(),
@@ -93,7 +88,6 @@ app.all('/api/v1/*', async (reqContext) => {
   );
 });
 
-// TODO: Determine if this should be changed in any way for production
 const port = Number(process.env.PORT ?? 3001);
 
 // TODO: Determine if this should be changed in any way for production
