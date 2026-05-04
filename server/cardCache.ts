@@ -26,7 +26,6 @@ export function getCached(ids: number[]): {
       missing.push(id);
     }
   }
-  console.log(`[cache] ${cached.length} hit, ${missing.length} miss`);
   return { cached, missing };
 }
 
