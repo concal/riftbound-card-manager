@@ -28,13 +28,13 @@ export function CardResult({ card }: CardResultProps) {
   return (
     <>
       <div
-        className={`flex flex-col items-center gap-2 w-full border border-border rounded-xl p-2 cursor-pointer hover:border-foreground/30 transition-colors${imageLoadStatus === 'pending' ? ' hidden' : ''}`}
+        className={`flex flex-col items-center gap-2 w-fit max-w-[calc(50%-8px)] border border-border rounded-xl p-2 cursor-pointer hover:border-foreground/30 transition-colors${imageLoadStatus === 'pending' ? ' hidden' : ''}`}
         onClick={() => setModalOpen(true)}
       >
-        <div className="relative w-full rounded-lg overflow-hidden shadow-md bg-muted aspect-[744/1039]">
+        <div className="relative w-fit max-w-full rounded-lg overflow-hidden shadow-md bg-muted">
           <img
             alt={name}
-            className="w-full h-full object-cover"
+            className="max-h-[280px] w-auto max-w-full block"
             onError={() => setImageLoadStatus('error')}
             onLoad={() => setImageLoadStatus('loaded')}
             src={imageUrl!}

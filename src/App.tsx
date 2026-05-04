@@ -10,7 +10,7 @@ export function App() {
       <CollectionProvider>
         <div className="min-h-screen flex flex-col">
           <HeaderNav />
-          <main className="flex-1 flex flex-col pb-19 px-3 pt-3 sm:pb-0 ">
+          <main className="flex-1 flex flex-col pb-19 px-3 pt-3 sm:pb-0 sm:px-8 sm:pt-4 max-w-5xl w-full mx-auto">
             <Routes />
           </main>
           <MobileFooterNav />
