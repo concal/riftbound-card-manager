@@ -59,8 +59,8 @@ app.post('/api/v1/bulk/resolve/tcgplayer', async (reqContext) => {
         })
           .then((r) => r.json())
           .then(
-            (data: { data: { resolved: ResolvedItem[] } }) =>
-              data.data.resolved ?? [],
+            (data) =>
+              (data as { data: { resolved: ResolvedItem[] } }).data.resolved ?? [],
           ),
       ),
     );
