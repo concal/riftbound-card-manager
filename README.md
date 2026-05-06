@@ -1,4 +1,4 @@
-# Riftbound Collection Manager
+# [Work in Progress] Riftbound Collection Manager
 
 A personal card collection manager for Riftbound TCG. Search for cards by name, track your collection, and view live market prices powered by the TCGPlayer API.
 
