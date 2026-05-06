@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { CardResult } from '@/components/CardResult';
+import { SearchEmptyState } from '@/components/SearchEmptyState';
 import { useSearch } from '@/hooks/useSearch';
 
 interface SearchContainerProps {
@@ -18,6 +19,9 @@ export function SearchContainer({ isEditingCollection }: SearchContainerProps) {
       onSearchSubmit(query);
     }
   };
+
+  const filteredResults = results.filter((card) => card.shippingCategoryId === 1);
+  const showEmptyState = !loading && !error && filteredResults.length === 0;
 
   return (
     <div className="w-full space-y-4">
@@ -43,22 +47,18 @@ export function SearchContainer({ isEditingCollection }: SearchContainerProps) {
 
       {error && <p className="text-destructive text-sm">Error: {error}</p>}
 
-      {searched && !loading && !error && results.length === 0 && (
-        <p className="text-muted-foreground text-sm">No results found.</p>
-      )}
-
-      {results.length > 0 && (
+      {!error && filteredResults.length > 0 && (
         <p className="text-muted-foreground text-sm">
-          {results.length} result{results.length !== 1 ? 's' : ''}
+          {filteredResults.length} result{filteredResults.length !== 1 ? 's' : ''}
         </p>
       )}
 
+      {showEmptyState && <SearchEmptyState searched={searched} />}
+
       <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
-        {results
-          .filter((card) => card.shippingCategoryId === 1)
-          .map((card) => (
-            <CardResult key={card.id} card={card} />
-          ))}
+        {filteredResults.map((card) => (
+          <CardResult key={card.id} card={card} />
+        ))}
       </div>
     </div>
   );

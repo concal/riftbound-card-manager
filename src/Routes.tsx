@@ -62,7 +62,7 @@ export function Routes() {
         }
       />
       <Route path="/login" element={<AuthContainer />} />
-      <Route path="*" element={<Navigate to="/collection" replace />} />
+      <Route path="*" element={<Navigate to="/search" replace />} />
     </ReactRoute>
   );
 }
