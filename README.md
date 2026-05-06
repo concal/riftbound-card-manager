@@ -1,4 +1,4 @@
-# [In Development] Riftbound Collection Manager
+# Riftbound Collection Manager
 
 A personal card collection manager for Riftbound TCG. Search for cards by name, track your collection, and view live market prices powered by the TCGPlayer API.
 
@@ -10,6 +10,23 @@ A personal card collection manager for Riftbound TCG. Search for cards by name, 
 - **Filtering & Sorting** — Filter your collection by name or price range, sort by price or name
 - **Authentication** — Email/password auth via [better-auth](https://better-auth.com)
 - **Responsive UI** — Mobile-friendly layout with a bottom nav on small screens
+
+### Collection Management
+
+Powered by Better Auth, MongoDB, and Hono.
+
+| Light Mode | Dark Mode |
+|---|---|
+| <img width="1263" height="1269" alt="image" src="https://github.com/user-attachments/assets/2b55d05c-2eff-4329-a222-392db17b074e" /> | <img width="1263" height="1267" alt="image" src="https://github.com/user-attachments/assets/6815f081-76af-4ca4-b06e-f2d87af08485" /> | 
+| <img width="1278" height="1268" alt="image" src="https://github.com/user-attachments/assets/3370be6e-acf5-4a80-abc8-d94a3e52bd8b" /> | <img width="1280" height="1267" alt="image" src="https://github.com/user-attachments/assets/80fba06b-4960-49b5-842e-8b45ea359db1" /> | 
+
+### Card Search
+
+Powered by TCGAPI.
+
+| Light Mode | Dark Mode |
+|---|---|
+| <img width="1280" height="1268" alt="image" src="https://github.com/user-attachments/assets/22a4f7ff-a082-44d3-8dcf-69f896cf5162" /> | <img width="1277" height="1267" alt="image" src="https://github.com/user-attachments/assets/43b9a9d1-df86-41f1-8039-207fa91eed0d" /> | 
 
 ## Tech Stack
 
